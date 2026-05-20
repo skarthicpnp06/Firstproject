@@ -1,0 +1,657 @@
+import React from "react";
+
+function Header() {
+  return (
+    <header className="header">
+      <div className="header-content">
+        <h1>Welcome to ShopEasy</h1>
+        <p>Best deals on electronics and accessories</p>
+        <button>Shop Now</button>
+      </div>
+    </header>
+  );
+}
+export default Header;
+
+
+import React from "react";
+import { Link } from "react-router-dom";
+import logo from "./images/logo.jpg";
+
+function Navbar({ search, setSearch }) {
+  return (
+    <nav className="navbar">
+      <div className="logo">
+        <img src={logo} alt="logo" />
+        <h2>ShopEasy</h2>
+      </div>
+
+      {/* SEARCH BOX */}
+      <input
+        type="text"
+        placeholder="Search products..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        className="search-input"
+      />
+
+      <ul className="nav-links">
+        <li><Link to="/">Home</Link></li>
+        <li><Link to="/products">Products</Link></li>
+        <li><Link to="/about">About</Link></li>
+        <li><Link to="/contact">Contact</Link></li>
+      </ul>
+
+      <button className="cart-btn">Cart</button>
+    </nav>
+  );
+}
+
+export default Navbar;
+
+import React from "react";
+
+function ProductCard({ name, price, image }) {
+  return (
+    <div className="product-card">
+
+      <div className="product-info">
+        <img src= {image}/>
+        <h3>{name}</h3>
+        <p>{price}</p>
+
+        <button>Add to Cart</button>
+      </div>
+    </div>
+  );
+}
+export default ProductCard;
+
+import React from "react";
+
+function About() {
+  return (
+    <div className="page-container">
+      <h1>About ShopEasy</h1>
+
+      <p>
+        ShopEasy is a modern ecommerce demo built using React. Our goal is to
+        provide a smooth and simple online shopping experience with clean UI
+        and fast performance.
+      </p>
+
+      <h2>🎯 Our Mission</h2>
+      <p>
+        To make online shopping easy, fast, and accessible for everyone by
+        offering high-quality products at affordable prices.
+      </p>
+
+      <h2>🚀 What We Offer</h2>
+      <ul>
+        <li>Wide range of electronics and accessories</li>
+        <li>Best deals and discounts</li>
+        <li>Fast and secure checkout experience</li>
+        <li>Responsive design for all devices</li>
+      </ul>
+
+      <h2>💡 Why Choose Us?</h2>
+      <p>
+        We focus on user experience, clean design, and simple navigation so you
+        can find what you need without confusion.
+      </p>
+    </div>
+  );
+}
+
+export default About;
+
+import React from "react";
+
+function Contact() {
+  return (
+    <div className="page-container">
+      <h1>Contact Us</h1>
+
+      <p>
+        We'd love to hear from you! Whether you have a question about products,
+        pricing, or support — our team is ready to help.
+      </p>
+
+      <h2>📧 Email Support</h2>
+      <p>support@shopeasy.com</p>
+
+      <h2>📱 Phone Support</h2>
+      <p>+91 98765 43210</p>
+
+      <h2>🏢 Office Address</h2>
+      <p>
+        ShopEasy Pvt Ltd<br />
+        Coimbatore, Tamil Nadu, India
+      </p>
+
+      <h2>🕒 Working Hours</h2>
+      <p>Monday - Saturday: 9:00 AM - 6:00 PM</p>
+
+      <h2>💬 Send a Message</h2>
+
+      <form className="contact-form">
+        <input type="text" placeholder="Your Name" />
+        <input type="email" placeholder="Your Email" />
+        <textarea placeholder="Your Message"></textarea>
+        <button type="submit">Send Message</button>
+      </form>
+    </div>
+  );
+}
+
+export default Contact;
+
+import React from "react";
+import Header from "../components/Header";
+
+function Home() {
+  return (
+    <div>
+      <Header />
+      <h2 style={{ textAlign: "center" }}>Welcome to ShopEasy Home Page</h2>
+    </div>
+  );
+}
+
+export default Home;
+
+import React from "react";
+import ProductCard from "../components/ProductCard";
+
+function Products({ products, search }) {
+  // Filter products based on search text
+  const filteredProducts = products.filter((p) =>
+    p.name.toLowerCase().includes(search.toLowerCase())
+  );
+
+  return (
+    <div>
+      <div className="products-container">
+        {filteredProducts.length > 0 ? (
+          filteredProducts.map((p) => (
+            <ProductCard
+              key={p.id}
+              name={p.name}
+              price={p.price}
+              image={p.image}   // ✅ image passed here
+            />
+          ))
+        ) : (
+          <h2 style={{ textAlign: "center", width: "100%" }}>
+            No products found
+          </h2>
+        )}
+      </div>
+    </div>
+  );
+}
+
+export default Products;
+
+import React, { useState } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
+import Navbar from "./components/Navbar";
+import Home from "./pages/Home";
+import Products from "./pages/Products";
+import About from "./pages/About";
+import Contact from "./pages/Contact";
+import "./App.css"
+import pro1 from "./components/images/pro1.jpg";
+
+function App() {
+  const [search, setSearch] = useState("");
+
+  const products = [
+    { id: 1, name: "Wireless Headphones", price: "$99", image: pro1 },
+    { id: 2, name: "Smart Watch", price: "$149", image: "/images/product2.jpg" },
+    { id: 3, name: "Gaming Mouse", price: "$59", image: "/images/product3.jpg" },
+  ];
+
+  return (
+    <Router>
+      <Navbar search={search} setSearch={setSearch} />
+
+      <Routes>
+        <Route path="/" element={<Home />} />
+
+        <Route
+          path="/products"
+          element={<Products products={products} search={search} />}
+        />
+
+        <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
+      </Routes>
+    </Router>
+  );
+}
+
+export default App;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  background-color: #f4f4f4;
+}
+
+/* Navbar */
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #111827;
+  color: white;
+  padding: 15px 40px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo img {
+  width: 45px;
+  height: 45px;
+}
+
+.nav-links {
+  display: flex;
+  list-style: none;
+  gap: 25px;
+}
+
+.nav-links li {
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.nav-links li:hover {
+  color: #60a5fa;
+}
+
+.cart-btn {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Header */
+
+.header {
+  background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
+    url("https://images.unsplash.com/photo-1512436991641-6745cdb1723f");
+  background-size: cover;
+  background-position: center;
+  height: 400px;
+  color: white;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.header-content h1 {
+  font-size: 50px;
+  margin-bottom: 10px;
+}
+
+.header-content p {
+  margin-bottom: 20px;
+  font-size: 18px;
+}
+
+.header-content button {
+  padding: 12px 24px;
+  border: none;
+  background: #2563eb;
+  color: white;
+  font-size: 16px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* Products */
+
+.products-container {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  padding: 50px;
+  flex-wrap: wrap;
+}
+
+.product-card {
+  background: white;
+  width: 280px;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+  transition: 0.3s;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+}
+
+.product-card img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+}
+
+.product-info {
+  padding: 20px;
+  text-align: center;
+}
+
+.product-info h3 {
+  margin-bottom: 10px;
+}
+
+.product-info p {
+  margin-bottom: 15px;
+  color: #2563eb;
+  font-weight: bold;
+}
+
+.product-info button {
+  padding: 10px 18px;
+  border: none;
+  background: #111827;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Footer */
+
+.footer {
+  background: #111827;
+  color: white;
+  text-align: center;
+  padding: 20px;
+}
+
+.search-container {
+  display: flex;
+  justify-content: center;
+  margin: 20px;
+}
+
+.search-container input {
+  width: 300px;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  outline: none;
+  font-size: 16px;
+}
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.contact-form input,
+.contact-form textarea {
+  padding: 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 15px;
+  transition: 0.3s;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+  border-color: #2563eb;
+  outline: none;
+  box-shadow: 0 0 6px rgba(37, 99, 235, 0.3);
+}
+
+.contact-form textarea {
+  min-height: 120px;
+  resize: none;
+}
+
+.contact-form button {
+  background: #2563eb;
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.contact-form button:hover {
+  background: #1d4ed8;
+  transform: translateY(-2px);
+}
+
+.contact-form button:active {
+  transform: scale(0.98);
+}
+.page-container h1 {
+  font-size: 32px;
+  color: #111827;
+  margin-bottom: 10px;
+  border-bottom: 2px solid #2563eb;
+  display: inline-block;
+  padding-bottom: 5px;
+}
+
+.page-container h2 {
+  font-size: 20px;
+  color: #2563eb;
+  margin-top: 25px;
+}
+
+.page-container p {
+  font-size: 16px;
+  color: #374151;
+  line-height: 1.7;
+  margin-top: 10px;
+}
+
+.page-container ul {
+  margin-top: 10px;
+  padding-left: 20px;
+}
+
+.page-container ul li {
+  margin-bottom: 8px;
+  color: #374151;
+  position: relative;
+}
+
+.page-container ul li::before {
+  content: "✔";
+  color: #22c55e;
+  margin-right: 8px;
+}
+.page-container {
+  max-width: 900px;
+  margin: 40px auto;
+  background: #ffffff;
+  padding: 35px;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  font-family: Arial, sans-serif;
+}
+.search-input {
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: none;
+  outline: none;
+  width: 200px;
+  margin: 0 20px;
+}
+
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
+import './index.css'
+import App from './App.jsx'
+
+createRoot(document.getElementById('root')).render(<App />)
+
+.form-container {
+  max-width: 600px;
+  margin: 50px auto;
+  background: white;
+  padding: 35px;
+  border-radius: 12px;
+  box-shadow: 0px 5px 15px rgba(0,0,0,0.1);
+}
+
+.form-container h2 {
+  text-align: center;
+  margin-bottom: 25px;
+  color: #111827;
+}
+
+.custom-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.custom-form input,
+.custom-form textarea {
+  padding: 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 16px;
+  outline: none;
+  transition: 0.3s;
+}
+
+.custom-form input:focus,
+.custom-form textarea:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 6px rgba(37, 99, 235, 0.3);
+}
+
+.custom-form textarea {
+  min-height: 130px;
+  resize: none;
+}
+
+.custom-form button {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 14px;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.custom-form button:hover {
+  background: #1d4ed8;
+  transform: translateY(-2px);
+}
+
+.custom-form button:active {
+  transform: scale(0.98);
+}
+
+import React, { useState } from "react";
+import "./Form.css";
+
+function Form() {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    message: "",
+  });
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    alert("Form Submitted Successfully!");
+
+    console.log(formData);
+
+    setFormData({
+      name: "",
+      email: "",
+      phone: "",
+      message: "",
+    });
+  };
+
+  return (
+    <div className="form-container">
+      <h2>Customer Inquiry Form</h2>
+
+      <form onSubmit={handleSubmit} className="custom-form">
+        <input
+          type="text"
+          name="name"
+          placeholder="Enter Your Name"
+          value={formData.name}
+          onChange={handleChange}
+          required
+        />
+
+        <input
+          type="email"
+          name="email"
+          placeholder="Enter Your Email"
+          value={formData.email}
+          onChange={handleChange}
+          required
+        />
+
+        <input
+          type="tel"
+          name="phone"
+          placeholder="Enter Your Phone Number"
+          value={formData.phone}
+          onChange={handleChange}
+          required
+        />
+
+        <textarea
+          name="message"
+          placeholder="Enter Your Message"
+          value={formData.message}
+          onChange={handleChange}
+          required
+        ></textarea>
+
+        <button type="submit">Submit Form</button>
+      </form>
+    </div>
+  );
+}
+
+export default Form;
