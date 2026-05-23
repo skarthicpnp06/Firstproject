@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-function Register() {
+function Login() {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
-    name: "",
     email: "",
     password: "",
   });
@@ -17,29 +16,37 @@ function Register() {
     });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = async (e) => {
 
-    alert("Registration Successful");
+  e.preventDefault();
 
-    navigate("/login");
-  };
+  const response = await fetch(
+    "http://localhost:8080/api/login",
+    {
+      method: "POST",
 
+      headers: {
+        "Content-Type": "application/json",
+      },
+
+      body: JSON.stringify(formData),
+    }
+  );
+
+  const message = await response.text();
+
+  alert(message);
+
+  if(message === "Login Success") {
+    navigate("/");
+  }
+};
   return (
     <div className="auth-container">
       <div className="auth-card">
-        <h2>Register</h2>
+        <h2>Login</h2>
 
         <form onSubmit={handleSubmit} className="auth-form">
-          <input
-            type="text"
-            name="name"
-            placeholder="Enter Name"
-            value={formData.name}
-            onChange={handleChange}
-            required
-          />
-
           <input
             type="email"
             name="email"
@@ -58,16 +65,15 @@ function Register() {
             required
           />
 
-          <button type="submit">Register</button>
+          <button type="submit">Login</button>
         </form>
 
         <p className="auth-text">
-          Already have an account?{" "}
-          <Link to="/login">Login Here</Link>
+          New User? <Link to="/register">Register Here</Link>
         </p>
       </div>
     </div>
   );
 }
 
-export default Register;
+export default Login;

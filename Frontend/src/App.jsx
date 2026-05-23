@@ -1,12 +1,8 @@
-import React, { useState } from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-} from "react-router-dom";
+import React, { useState, useEffect } from "react";
+
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import Navbar from "./components/Navbar";
-
 import Home from "./pages/Home";
 import Products from "./pages/Products";
 import About from "./pages/About";
@@ -16,48 +12,48 @@ import Register from "./pages/Register";
 
 import "./App.css";
 
-import pro1 from "./components/images/pro1.jpg";
-import pro2 from "./components/images/pro2.jpg";
-import pro33 from "./components/images/pro33.jpg";
-
 function App() {
+
   const [search, setSearch] = useState("");
+
   const [cart, setCart] = useState([]);
 
-  const products = [
-    {
-      id: 1,
-      name: "Wireless Headphones",
-      price: "$99",
-      image: pro1,
-    },
-    {
-      id: 2,
-      name: "Smart Watch",
-      price: "$149",
-      image: pro2,
-    },
-    {
-      id: 3,
-      name: "Gaming Mouse",
-      price: "$59",
-      image: pro33,
-    },
-  ];
+  const [products, setProducts] = useState([]);
 
-  const addToCart = (product) => {
-    setCart((prevCart) => [...prevCart, product]);
-  };
+  useEffect(() => {
+
+    fetch("http://localhost:8080/products")
+
+      .then((response) => response.json())
+
+      .then((data) => {
+
+        console.log(data);
+
+        setProducts(data);
+
+      })
+
+      .catch((error) => {
+
+        console.log("Fetch Error:", error);
+
+      });
+
+  }, []);
 
   return (
+
     <Router>
+
       <Navbar
-        cart={cart}
         search={search}
         setSearch={setSearch}
+        cart={cart}
       />
 
       <Routes>
+
         <Route path="/" element={<Home />} />
 
         <Route
@@ -66,18 +62,21 @@ function App() {
             <Products
               products={products}
               search={search}
-              addToCart={addToCart}
+              cart={cart}
+              setCart={setCart}
             />
           }
         />
 
         <Route path="/about" element={<About />} />
+
         <Route path="/contact" element={<Contact />} />
 
-        {/* LOGIN & REGISTER */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+
       </Routes>
+
     </Router>
   );
 }

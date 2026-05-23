@@ -1,16 +1,16 @@
-
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import logo from "./images/logo.jpg";
 
 function Navbar({ search, setSearch, cart }) {
+
   const [showCart, setShowCart] = useState(false);
 
   return (
     <>
       <nav className="navbar">
+
         <div className="logo">
-          <img src={logo} alt="logo" />
+          <img src="/images/logo.jpg" alt="logo" />
           <h2>ShopEasy</h2>
         </div>
 
@@ -34,28 +34,43 @@ function Navbar({ search, setSearch, cart }) {
           className="cart-btn"
           onClick={() => setShowCart(!showCart)}
         >
-          Cart ({cart.length})
+          Cart ({cart?.length || 0})
         </button>
+
       </nav>
 
       {showCart && (
         <div className="cart-container">
+
           <h2>Cart Items</h2>
 
           {cart.length === 0 ? (
+
             <p>Your cart is empty</p>
+
           ) : (
+
             cart.map((item, index) => (
+
               <div key={index} className="cart-item">
-                <img src={item.image} alt={item.name} />
+
+                <img
+                  src={item.image}
+                  alt={item.name}
+                  width="80"
+                />
 
                 <div>
                   <h4>{item.name}</h4>
                   <p>{item.price}</p>
                 </div>
+
               </div>
+
             ))
+
           )}
+
         </div>
       )}
     </>
